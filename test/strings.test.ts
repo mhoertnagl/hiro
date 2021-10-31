@@ -13,6 +13,16 @@ describe('ensurePrefix', () => {
   })
 })
 
+describe('ensurePostfix', () => {
+  it('should add the missing postfix', () => {
+    expect(strings.ensurePostfix('x', '.')).to.be.equal('x.')
+  })
+
+  it('not add the preexisting postfix', () => {
+    expect(strings.ensurePostfix('x.', '.')).to.be.equal('x.')
+  })
+})
+
 // // https://medium.com/swlh/how-to-setting-up-unit-tests-with-typescript-871c0f4f1609
 // import { suite, test } from '@testdeck/mocha'
 // import * as chai from 'chai'
