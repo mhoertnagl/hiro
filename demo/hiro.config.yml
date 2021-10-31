@@ -1,1 +1,14 @@
 outDir: ../docs
+
+// Wie führe ich den Kontext weiter? Wie aggregiere ich Ergebnisse?
+rules:
+  - source: content/**/*.md
+    algo: remarked
+    output: content/**/*.html
+  - source: layouts/index.handlebars
+    algo: handlebars
+    output: index.html
+
+rules:
+  content/**/*.md: content/**/*.html
+  layouts/index.handlebars: index.html

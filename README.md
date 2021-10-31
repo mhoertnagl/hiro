@@ -2,6 +2,11 @@
 
 Hiro Static Site Generator
 
+Class Pathy(path: string) with methods
+read(): string
+write(content: string)
+path manipulation methods
+
 https://www.npmjs.com/package/mkdirp
 
 https://github.com/paulmillr/chokidar
@@ -25,3 +30,5 @@ https://github.com/klaussinani/signale
 
 https://github.com/scramjetorg/scramjet
 https://github.com/josdejong/workerpool
+
+https://github.com/micromatch/micromatch
