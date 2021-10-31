@@ -5,10 +5,8 @@ Hiro Static Site Generator
 https://www.npmjs.com/package/mkdirp
 
 https://github.com/paulmillr/chokidar
-https://github.com/chalk
 https://github.com/wooorm/fault
 
-https://github.com/substack/minimist (wobei commander auch okay ist)
 https://github.com/isaacs/rimraf
 
 commander
