@@ -22,3 +22,6 @@ https://github.com/terkelg/prompts
 
 https://github.com/visionmedia/node-progress
 https://github.com/klaussinani/signale
+
+https://github.com/scramjetorg/scramjet
+https://github.com/josdejong/workerpool
