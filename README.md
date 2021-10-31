@@ -1,2 +1,30 @@
 # hiro
+
 Hiro Static Site Generator
+
+https://www.npmjs.com/package/mkdirp
+
+https://github.com/paulmillr/chokidar
+https://github.com/chalk
+https://github.com/wooorm/fault
+
+https://github.com/substack/minimist (wobei commander auch okay ist)
+https://github.com/isaacs/rimraf
+
+commander
+fast-glob
+
+https://github.com/eldargab/easy-table
+https://github.com/isaacs/node-touch
+https://github.com/unifiedjs
+https://github.com/sindresorhus/ora
+https://github.com/SBoudrias/Inquirer.js or
+https://github.com/terkelg/prompts
+https://github.com/visionmedia/node-progress
+https://github.com/klaussinani/signale
+
+https://caolan.github.io/async/v3/
+
+https://lodash.com/
+
+https://github.com/davidtheclark/cosmiconfig

@@ -1,0 +1,37 @@
+{
+  "name": "hiro",
+  "version": "1.0.0",
+  "repository": "",
+  "description": "Hiro Static Site Generator",
+  "author": "Mathias Hörtnagl",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "static-site-generator"
+  ],
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "main": "lib/cli.js",
+  "bin": {
+    "hiro": "bin/hiro"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^8.2.0",
+    "esm": "^3.2.25",
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^10.0.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/fs-extra": "^9.0.13",
+    "@types/js-yaml": "^4.0.4",
+    "@types/node": "^16.11.6",
+    "typescript": "^4.4.4"
+  }
+}
