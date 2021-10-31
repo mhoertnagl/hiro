@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import build from './build/build'
+import build from '@/build/build'
 
 export function cli(args: string[]) {
   const program = new Command()

@@ -1,5 +1,5 @@
 import { join, parse } from 'path'
-import { ensurePrefix } from './strings'
+import { ensurePrefix } from '@/utils/strings'
 
 export function ext(path: string, ext: string) {
   const { dir, name } = parse(path)
