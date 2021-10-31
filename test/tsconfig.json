@@ -10,13 +10,9 @@
     "noImplicitAny": false,
     "typeRoots" : ["../node_modules/@types"],
     "paths": {
-      "@src/*": ["../src/*"]
+      "@/*": ["../src/*"]
     }
   },
   "exclude": ["../node_modules"],
-  "include": ["./**/*.ts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
-  }
+  "include": ["./**/*.ts"]
 }

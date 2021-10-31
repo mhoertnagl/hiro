@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha'
 import { expect } from 'chai'
-// import * as strings from '@src/utils/strings'
-import * as strings from '../src/utils/strings'
+import * as strings from '@/utils/strings'
+// import * as strings from '../src/utils/strings'
 
 describe('ensurePrefix', () => {
   it('should add the missing prefix', () => {

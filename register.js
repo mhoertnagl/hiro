@@ -9,4 +9,5 @@ tsNode.register({
   files: true,
   transpileOnly: true,
   project: './test/tsconfig.json',
+  require: ['tsconfig-paths/register']
 });
