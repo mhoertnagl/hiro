@@ -6,7 +6,7 @@ import build from '@/build/build.js'
 export default function run(args: string[]) {
   const program = new Command()
 
-  console.log('started')
+  console.log('started 2')
 
   program
     .command('build')
