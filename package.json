@@ -11,7 +11,8 @@
     "static-site-generator"
   ],
   "scripts": {
-    "dev": "tsc -w & tsc-alias -w",
+    "alias": "tsc-alias --watch",
+    "dev": "concurrently \"tsc -w\" \"tsc-alias -w\"",
     "build": "tsc && tsc-alias",
     "test": "nyc ./node_modules/.bin/_mocha"
   },
@@ -49,6 +50,7 @@
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.6",
     "chai": "^4.3.4",
+    "concurrently": "^6.3.0",
     "mocha": "^9.1.3",
     "nyc": "^15.1.0",
     "ts-mockito": "^2.6.1",
