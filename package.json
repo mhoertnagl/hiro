@@ -1,6 +1,7 @@
 {
   "name": "hiro",
   "version": "1.0.0",
+  "type": "module",
   "repository": "",
   "description": "Hiro Static Site Generator",
   "author": "Mathias Hörtnagl",
@@ -16,7 +17,7 @@
   },
   "main": "lib/cli.js",
   "bin": {
-    "hiro": "bin/hiro"
+    "hiro": "lib/cli.js"
   },
   "publishConfig": {
     "access": "public"
@@ -30,7 +31,14 @@
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
     "js-yaml": "^4.1.0",
-    "spinnies": "^0.5.1"
+    "rehype-stringify": "^9.0.2",
+    "remark-gfm": "^3.0.0",
+    "remark-parse": "^10.0.0",
+    "remark-rehype": "^10.0.0",
+    "spinnies": "^0.5.1",
+    "to-vfile": "^7.2.2",
+    "unified": "^10.1.0",
+    "vfile-reporter": "^7.0.2"
   },
   "devDependencies": {
     "@testdeck/mocha": "^0.1.2",

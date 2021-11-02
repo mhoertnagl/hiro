@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
     "removeComments": true,
-    "target": "ESNext",
-    "baseUrl": "./src",
     "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "typeRoots" : ["src/types", "node_modules/@types"],
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "module": "ES2020",
+    "target": "ES2020",
+    "outDir": "lib",
+    "baseUrl": "./src",
+    "lib": ["es2020", "DOM"],
+    "typeRoots": ["src/types", "node_modules/@types"],
+    "paths": { "@/*": ["./*"] }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["node_modules/", "test/"]

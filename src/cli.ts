@@ -1,8 +1,12 @@
-import { Command } from 'commander'
-import build from '@/build/build'
+#!/usr/bin/env node
 
-export function cli(args: string[]) {
+import { Command } from 'commander'
+import build from '@/build/build.js'
+
+export default function run(args: string[]) {
   const program = new Command()
+
+  console.log('started')
 
   program
     .command('build')
@@ -12,3 +16,5 @@ export function cli(args: string[]) {
 
   program.parse(args)
 }
+
+run(process.argv)

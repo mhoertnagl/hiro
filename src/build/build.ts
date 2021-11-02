@@ -2,24 +2,45 @@
 // import Spinnies from 'spinnies'
 // import { cosmiconfig } from 'cosmiconfig'
 // import HiroConfig from '@/config/hiro-config'
-import chokidar from 'chokidar'
+// import chokidar from 'chokidar'
+
+// import { read } from 'to-vfile'
+import { reporter } from 'vfile-reporter'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkGfm from 'remark-gfm'
+import remarkRehype from 'remark-rehype'
+import remarkStringify from 'rehype-stringify'
 
 export default async function () {
   // await loadConfig()
-
-  chokidar
-    .watch(['content/**/*', 'layouts/**/*', 'public/**/*'], {
-      persistent: true,
-    })
-    .on('add', (path) => {
-      console.log('Created: ' + path)
-    })
-    .on('change', (path) => {
-      console.log('Changed: ' + path)
-    })
-
+  // chokidarTest()
   // spinnnerTest()
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype)
+    .use(remarkStringify)
+
+  // const input = await read('example.md')
+  const output = await processor.process('# Test')
+
+  console.error(reporter(output))
+  console.log(String(output))
 }
+
+// function chokidarTest() {
+//   chokidar
+//     .watch(['content/**/*', 'layouts/**/*', 'public/**/*'], {
+//       persistent: true,
+//     })
+//     .on('add', (path) => {
+//       console.log('Created: ' + path)
+//     })
+//     .on('change', (path) => {
+//       console.log('Changed: ' + path)
+//     })
+// }
 
 // async function loadConfig() {
 //   const moduleName = 'hiro'

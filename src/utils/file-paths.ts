@@ -21,7 +21,7 @@ export function subdir(path: string, ...subdirs: string[]) {
   return join(dir, ...subdirs, name + ext)
 }
 
-export function superdir(path: string, ...superdirs: string[]) {
-  const { dir, name, ext } = parse(path)
-  return join(...superdirs, dir, name + ext)
-}
+// export function superdir(path: string, ...superdirs: string[]) {
+//   const { dir, name, ext } = parse(path)
+//   return join(...superdirs, dir, name + ext)
+// }
