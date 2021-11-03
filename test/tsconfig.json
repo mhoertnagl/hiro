@@ -1,8 +1,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": "./",
-    "module": "commonjs",
+    "module": "CommonJS",
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "isolatedModules": false,

@@ -1,7 +1,5 @@
 // import chalk from 'chalk'
 // import Spinnies from 'spinnies'
-// import { cosmiconfig } from 'cosmiconfig'
-// import HiroConfig from '@/config/hiro-config'
 // import chokidar from 'chokidar'
 
 // import { read } from 'to-vfile'
@@ -12,6 +10,9 @@ import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import remarkStringify from 'rehype-stringify'
 
+// Get file path:
+//   if it is a markdown file
+//
 export default async function () {
   // await loadConfig()
   // chokidarTest()
@@ -29,6 +30,16 @@ export default async function () {
   console.log(String(output))
 }
 
+function compileMarkdown(src: string, out: string) {}
+
+function compileHandlebars(src: string, out: string) {}
+
+// class Generator {
+//   private compileMarkdown(src: string, out: string) {}
+
+//   private compileHandlebars(src: string, out: string) {}
+// }
+
 // function chokidarTest() {
 //   chokidar
 //     .watch(['content/**/*', 'layouts/**/*', 'public/**/*'], {
@@ -40,23 +51,6 @@ export default async function () {
 //     .on('change', (path) => {
 //       console.log('Changed: ' + path)
 //     })
-// }
-
-// async function loadConfig() {
-//   const moduleName = 'hiro'
-//   const explorer = cosmiconfig(moduleName, {
-//     searchPlaces: [
-//       `${moduleName}.config.json`,
-//       `${moduleName}.config.yaml`,
-//       `${moduleName}.config.yml`,
-//     ],
-//   })
-//   const result = await explorer.search()
-//   let config = new HiroConfig()
-//   if (result && result.config) {
-//     config = Object.assign<HiroConfig, HiroConfig>(config, result.config)
-//   }
-//   console.log(config)
 // }
 
 // function spinnnerTest() {
