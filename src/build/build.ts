@@ -2,43 +2,17 @@
 // import Spinnies from 'spinnies'
 // import chokidar from 'chokidar'
 
-// import { read } from 'to-vfile'
-import { reporter } from 'vfile-reporter'
-import { unified } from 'unified'
-import remarkParse from 'remark-parse'
-import remarkGfm from 'remark-gfm'
-import remarkRehype from 'remark-rehype'
-import remarkStringify from 'rehype-stringify'
+import loadConfig from '@/config/load-config.js'
+import Generator from '@/gen/generator.js'
 
-// Get file path:
-//   if it is a markdown file
-//
-export default async function () {
+export default async function build() {
+  const config = await loadConfig()
+  const gen = new Generator(config)
+  await gen.generateAll()
   // await loadConfig()
   // chokidarTest()
   // spinnnerTest()
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(remarkStringify)
-
-  // const input = await read('example.md')
-  const output = await processor.process('# Test')
-
-  console.error(reporter(output))
-  console.log(String(output))
 }
-
-function compileMarkdown(src: string, out: string) {}
-
-function compileHandlebars(src: string, out: string) {}
-
-// class Generator {
-//   private compileMarkdown(src: string, out: string) {}
-
-//   private compileHandlebars(src: string, out: string) {}
-// }
 
 // function chokidarTest() {
 //   chokidar

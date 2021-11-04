@@ -1,3 +1,3 @@
 export default class HiroConfig {
-  outDir: string = '/docs'
+  outDir: string = '../docs/'
 }
