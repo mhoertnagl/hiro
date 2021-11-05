@@ -1,5 +1,5 @@
 import { VFile } from 'vfile'
-import { toVFile, write } from 'to-vfile'
+import { toVFile, write, read } from 'to-vfile'
 import { mkdirp } from 'vfile-mkdirp'
 import { rename } from 'vfile-rename'
 import { reporter } from 'vfile-reporter'
@@ -32,7 +32,7 @@ export default class Generator {
       // console.log(src.path)
       // console.log(src.stem)
       const out = this.getOutPath(src)
-      // console.log(out)
+      console.log(src)
       await this.generateMarkdown(src, out)
     }
   }
@@ -45,6 +45,8 @@ export default class Generator {
   }
 
   public async generateMarkdown(src: VFile, out: VFile) {
+    // Hier eine Idee zu einem Plugin fürs moven.
+    // https://github.com/unifiedjs/unified #move
     const output = await unified()
       .use(remarkParse)
       .use(remarkGfm)
@@ -52,8 +54,9 @@ export default class Generator {
       .use(rehypeStringify, { allowDangerousHtml: true })
       // .use(rehypeRaw)
       // .use(rehypeStringify)
-      .process(src)
+      .process(await read(src))
 
+    // https://github.com/vfile/vfile-reporter-pretty
     console.error(reporter(output))
 
     const context = { content: String(output) }

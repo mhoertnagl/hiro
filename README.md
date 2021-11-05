@@ -7,7 +7,7 @@ read(): string
 write(content: string)
 path manipulation methods
 
-https://www.npmjs.com/package/mkdirp
+https://github.com/vfile/vfile-matter
 
 https://github.com/paulmillr/chokidar
 https://github.com/wooorm/fault
