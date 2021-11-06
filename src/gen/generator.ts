@@ -1,18 +1,18 @@
-import { VFile } from 'vfile'
 import { toVFile, write, read } from 'to-vfile'
+import { matter } from 'vfile-matter'
 import { mkdirp } from 'vfile-mkdirp'
-import { rename } from 'vfile-rename'
 import { reporter } from 'vfile-reporter'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
+import readingTime, { ReadTimeResults } from 'reading-time'
+import { join, parse } from 'path'
 
 import LayoutsCache from '@/gen/layouts-cache.js'
 import globFiles from '@/gen/glob-files.js'
 import HiroConfig from '@/config/hiro-config'
-import { join, parse } from 'path'
 
 export default class Generator {
   private readonly config: HiroConfig
@@ -25,9 +25,7 @@ export default class Generator {
 
   public async generateAll() {
     for (const src of await globFiles('content/**/*.md')) {
-      console.log(src)
       const out = this.getOutPath(src)
-      console.log(out)
       await this.generateMarkdown(src, out)
     }
   }
@@ -37,27 +35,30 @@ export default class Generator {
     return join(this.config.outDir, dir, `${name}.html`)
   }
 
+  // https://github.com/vfile/vfile-reporter-pretty
   public async generateMarkdown(src: string, out: string) {
-    // Hier eine Idee zu einem Plugin fürs moven.
-    // https://github.com/unifiedjs/unified #move
     const input = await read(src)
+
+    matter(input, { strip: true })
+
+    const readTime = readingTime(String(input))
+
     const output = await unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeStringify, { allowDangerousHtml: true })
-      // .use(rehypeRaw)
-      // .use(rehypeStringify)
       .process(input)
 
-    // https://github.com/vfile/vfile-reporter-pretty
     console.error(reporter(output))
 
-    const context = { content: String(output) }
-    console.log(context)
+    const context: MarkdownContext = {
+      matter: output.data.matter as MarkdownFrontmatter,
+      readTime: readTime,
+      content: String(output),
+    }
 
-    // TODO: set article from matter data.
-    this.generateHandlebars('article', context, out)
+    this.generateHandlebars(context.matter.layout, context, out)
   }
 
   public async generateHandlebars(
@@ -70,4 +71,14 @@ export default class Generator {
     await mkdirp(file)
     await write(file)
   }
+}
+
+interface MarkdownContext {
+  matter: MarkdownFrontmatter
+  readTime: ReadTimeResults
+  content: string
+}
+
+interface MarkdownFrontmatter {
+  layout: string
 }

@@ -7,7 +7,7 @@ read(): string
 write(content: string)
 path manipulation methods
 
-https://github.com/vfile/vfile-matter
+https://unifiedjs.com/explore/package/remark-directive/
 
 https://github.com/paulmillr/chokidar
 https://github.com/wooorm/fault
