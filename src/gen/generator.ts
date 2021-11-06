@@ -6,6 +6,7 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
+import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import readingTime, { ReadTimeResults } from 'reading-time'
 import { join, parse } from 'path'
@@ -47,6 +48,7 @@ export default class Generator {
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeHighlight)
       .use(rehypeStringify, { allowDangerousHtml: true })
       .process(input)
 
