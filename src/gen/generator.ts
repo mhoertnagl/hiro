@@ -10,9 +10,9 @@ import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 
 import LayoutsCache from '@/gen/layouts-cache.js'
-import globVFiles from '@/gen/glob-vfiles.js'
+import globFiles from '@/gen/glob-files.js'
 import HiroConfig from '@/config/hiro-config'
-import { join } from 'path'
+import { join, parse } from 'path'
 
 export default class Generator {
   private readonly config: HiroConfig
@@ -24,29 +24,23 @@ export default class Generator {
   }
 
   public async generateAll() {
-    for (const src of await globVFiles('content/**/*.md')) {
+    for (const src of await globFiles('content/**/*.md')) {
       console.log(src)
-      // console.log(src.basename)
-      // console.log(src.dirname)
-      // console.log(src.extname)
-      // console.log(src.path)
-      // console.log(src.stem)
       const out = this.getOutPath(src)
-      console.log(src)
+      console.log(out)
       await this.generateMarkdown(src, out)
     }
   }
 
-  private getOutPath(src: VFile) {
-    return rename(toVFile(src), [
-      { dirname: { prefix: this.config.outDir } },
-      '.html',
-    ])
+  private getOutPath(src: string) {
+    const { dir, name } = parse(src)
+    return join(this.config.outDir, dir, `${name}.html`)
   }
 
-  public async generateMarkdown(src: VFile, out: VFile) {
+  public async generateMarkdown(src: string, out: string) {
     // Hier eine Idee zu einem Plugin fürs moven.
     // https://github.com/unifiedjs/unified #move
+    const input = await read(src)
     const output = await unified()
       .use(remarkParse)
       .use(remarkGfm)
@@ -54,7 +48,7 @@ export default class Generator {
       .use(rehypeStringify, { allowDangerousHtml: true })
       // .use(rehypeRaw)
       // .use(rehypeStringify)
-      .process(await read(src))
+      .process(input)
 
     // https://github.com/vfile/vfile-reporter-pretty
     console.error(reporter(output))
@@ -66,41 +60,14 @@ export default class Generator {
     this.generateHandlebars('article', context, out)
   }
 
-  public async generateHandlebars(layout: string, context: object, out: VFile) {
+  public async generateHandlebars(
+    layout: string,
+    context: object,
+    out: string
+  ) {
     const compile = await this.layouts.findLayout(layout)
-    out.value = compile(context)
-    await mkdirp(out)
-    await write(out)
+    const file = toVFile({ path: out, value: compile(context) })
+    await mkdirp(file)
+    await write(file)
   }
-
-  // public async generateMarkdown(src: string, out: string) {
-  //   const input = toVFile(src)
-  //   const output = await unified()
-  //     .use(remarkParse)
-  //     .use(remarkGfm)
-  //     .use(remarkRehype, { allowDangerousHtml: true })
-  //     .use(rehypeStringify, { allowDangerousHtml: true })
-  //     // .use(rehypeRaw)
-  //     // .use(rehypeStringify)
-  //     .process(input)
-
-  //   console.error(reporter(output))
-
-  //   const context = { content: output.value }
-
-  //   // TODO: set article from matter data.
-  //   this.generateHandlebars('article', context, out)
-  // }
-
-  // public async generateHandlebars(
-  //   layout: string,
-  //   context: object,
-  //   out: string
-  // ) {
-  //   const compile = await this.layouts.findLayout(layout)
-  //   const html = compile(context)
-  //   const file = new VFile({ path: out, value: html })
-  //   await mkdirp(file)
-  //   await write(file)
-  // }
 }
