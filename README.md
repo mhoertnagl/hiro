@@ -7,6 +7,8 @@ read(): string
 write(content: string)
 path manipulation methods
 
+https://unifiedjs.com/explore/package/remark-hint/
+
 https://unifiedjs.com/explore/package/rehype-katex/
 
 https://unifiedjs.com/explore/package/rehype-slug/
@@ -43,3 +45,8 @@ https://github.com/micromatch/micromatch
 https://github.com/mottox2/remark-code-titles/blob/master/index.js
 
 https://github.com/temando/remark-graphviz/blob/master/src/index.js
+
+
+### Designs
+
+https://gridsome-starter-bleda.netlify.app/
