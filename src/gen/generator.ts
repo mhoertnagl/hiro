@@ -29,7 +29,9 @@ export default class Generator {
 
   public async generateAll() {
     await this.generateAllMarkdown()
+    this.sortPagesByDateDesc()
     await this.generateIndex()
+    await this.copyFolder('public', this.config.outDir)
   }
 
   private async generateAllMarkdown() {
@@ -108,6 +110,7 @@ export default class Generator {
     await fs.copy(src, out, {
       recursive: true,
       overwrite: true,
+      errorOnExist: false,
     })
   }
 }
