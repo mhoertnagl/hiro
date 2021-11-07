@@ -1,31 +1,23 @@
-// import chalk from 'chalk'
-// import Spinnies from 'spinnies'
-// import chokidar from 'chokidar'
-
 import loadConfig from '@/config/load-config.js'
 import Generator from '@/gen/generator.js'
+import watch from '@/build/watch.js'
 
-export default async function build() {
+export default async function build(options: HiroOptions) {
   const config = await loadConfig()
   const gen = new Generator(config)
   await gen.generateAll()
-  // await loadConfig()
-  // chokidarTest()
-  // spinnnerTest()
+
+  if (options.watch) {
+    watch(gen)
+  }
 }
 
-// function chokidarTest() {
-//   chokidar
-//     .watch(['content/**/*', 'layouts/**/*', 'public/**/*'], {
-//       persistent: true,
-//     })
-//     .on('add', (path) => {
-//       console.log('Created: ' + path)
-//     })
-//     .on('change', (path) => {
-//       console.log('Changed: ' + path)
-//     })
-// }
+interface HiroOptions {
+  watch: boolean
+}
+
+// import chalk from 'chalk'
+// import Spinnies from 'spinnies'
 
 // function spinnnerTest() {
 //   const spinnies = new Spinnies()

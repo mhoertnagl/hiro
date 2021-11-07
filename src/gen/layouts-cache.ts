@@ -34,7 +34,7 @@ export default class LayoutsCache {
    *
    * @param name The layout identifer.
    */
-  async findLayout(name: string) {
+  public async findLayout(name: string) {
     if (this.layouts.has(name) === false) {
       const layout = await this.loadLayout(name)
       this.layouts.set(name, layout)
@@ -46,6 +46,10 @@ export default class LayoutsCache {
     const path = join(this.root, `${name}.handlebars`)
     const source = await fs.readFile(path, 'utf8')
     return handlebars.compile(source)
+  }
+
+  public clear() {
+    this.layouts.clear()
   }
 }
 
