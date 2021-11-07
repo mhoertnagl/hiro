@@ -1,3 +1,5 @@
+import fs from 'fs-extra'
+import { join, parse } from 'path'
 import { toVFile, write, read } from 'to-vfile'
 import { matter } from 'vfile-matter'
 import { mkdirp } from 'vfile-mkdirp'
@@ -9,7 +11,6 @@ import remarkRehype from 'remark-rehype'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import readingTime, { ReadTimeResults } from 'reading-time'
-import { join, parse } from 'path'
 
 import LayoutsCache from '@/gen/layouts-cache.js'
 import globFiles from '@/gen/glob-files.js'
@@ -18,22 +19,48 @@ import HiroConfig from '@/config/hiro-config'
 export default class Generator {
   private readonly config: HiroConfig
   private readonly layouts: LayoutsCache
+  private readonly pages: MarkdownContext[]
 
   constructor(config: HiroConfig) {
     this.config = config
     this.layouts = new LayoutsCache('layouts')
+    this.pages = []
   }
 
   public async generateAll() {
+    await this.generateAllMarkdown()
+    await this.generateIndex()
+  }
+
+  private async generateAllMarkdown() {
     for (const src of await globFiles('content/**/*.md')) {
       const out = this.getOutPath(src)
       await this.generateMarkdown(src, out)
     }
   }
 
+  private async generateIndex() {
+    const context = { pages: this.pages }
+    const out = join(this.config.outDir, 'index.html')
+    this.generateHandlebars('index', context, out)
+  }
+
+  private sortPagesByDateDesc() {
+    this.pages.sort((a, b) => {
+      const da = a.matter.date
+      const db = b.matter.date
+      return da < db ? 1 : da > db ? -1 : 0
+    })
+  }
+
   private getOutPath(src: string) {
     const { dir, name } = parse(src)
     return join(this.config.outDir, dir, `${name}.html`)
+  }
+
+  private getRelativeOutPath(src: string) {
+    const { dir, name } = parse(src)
+    return join(dir, `${name}.html`)
   }
 
   // https://github.com/vfile/vfile-reporter-pretty
@@ -55,10 +82,13 @@ export default class Generator {
     console.error(reporter(output))
 
     const context: MarkdownContext = {
+      path: this.getRelativeOutPath(src),
       matter: output.data.matter as MarkdownFrontmatter,
       readTime: readTime,
       content: String(output),
     }
+
+    this.pages.push(context)
 
     this.generateHandlebars(context.matter.layout, context, out)
   }
@@ -73,9 +103,17 @@ export default class Generator {
     await mkdirp(file)
     await write(file)
   }
+
+  public async copyFolder(src: string, out: string) {
+    await fs.copy(src, out, {
+      recursive: true,
+      overwrite: true,
+    })
+  }
 }
 
 interface MarkdownContext {
+  path: string
   matter: MarkdownFrontmatter
   readTime: ReadTimeResults
   content: string
@@ -83,4 +121,7 @@ interface MarkdownContext {
 
 interface MarkdownFrontmatter {
   layout: string
+  title: string
+  synopsis: string
+  date: Date
 }
