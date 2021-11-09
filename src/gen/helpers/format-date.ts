@@ -1,5 +1,5 @@
-import handlebars from "handlebars";
-import * as dateFns from "date-fns";
+import handlebars from 'handlebars'
+import * as dateFns from 'date-fns'
 
 /**
  * Reasonably smart date formatting routine. Will either format the date up
@@ -17,19 +17,21 @@ import * as dateFns from "date-fns";
  *    "MMM d',' yyyy"   // i.e. Oct 24, 2020
  */
 export default function registerFormatDate() {
-  handlebars.registerHelper("formatDate", (date: Date, fmt: string) => {
-    const d = new Date(date);
-    const parts = fmt.split("|");
+  handlebars.registerHelper('formatDate', formatDate)
+}
 
-    if (parts.length === 1) {
-      return dateFns.format(d, parts[0]!);
+export function formatDate(date: Date, fmt: string) {
+  const d = new Date(date)
+  const parts = fmt.split('|')
+
+  if (parts.length === 1) {
+    return dateFns.format(d, parts[0]!)
+  }
+  if (parts.length === 2) {
+    if (d.getFullYear() === new Date().getFullYear()) {
+      return dateFns.format(d, parts[0]!)
     }
-    if (parts.length === 2) {
-      if (d.getFullYear() === new Date().getFullYear()) {
-        return dateFns.format(d, parts[0]!);
-      }
-      return dateFns.format(d, parts[0]! + parts[1]!);
-    }
-    return "???";
-  });
+    return dateFns.format(d, parts[0]! + parts[1]!)
+  }
+  return '???'
 }

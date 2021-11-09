@@ -16,6 +16,7 @@ interface HiroOptions {
   watch: boolean
 }
 
+// TODO: Add spinnies when building.
 // import chalk from 'chalk'
 // import Spinnies from 'spinnies'
 

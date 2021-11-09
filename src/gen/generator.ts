@@ -50,10 +50,15 @@ export default class Generator {
   private async generateMarkdown(src: string, out: string) {
     const input = await read(src)
 
+    // TODO: Use as unified plugin or create one.
     matter(input, { strip: true })
 
+    // TODO: Create plugin.
     const readTime = readingTime(String(input))
 
+    // TODO: Katex support.
+    // TODO: Comments plugin.
+    // TODO: Hints, Warnings plugin.
     const output = await unified()
       .use(remarkParse)
       .use(remarkGfm)
@@ -86,25 +91,20 @@ export default class Generator {
   }
 
   public async generateIndex() {
-    this.sortPagesByDateDesc()
     const context = { pages: this.pages }
     const out = join(this.config.outDir, 'index.html')
     this.generateHandlebars('index', context, out)
   }
 
-  private sortPagesByDateDesc() {
-    this.pages.sort((a, b) => {
-      const da = a.matter.date
-      const db = b.matter.date
-      return da < db ? 1 : da > db ? -1 : 0
-    })
-  }
+  // TODO: Implement groupby handlebars helper to group by category/tag when implemented.
 
+  // TODO: Use file-paths.ts/prepend and ext
   private getOutPath(src: string) {
     const { dir, name } = parse(src)
     return join(this.config.outDir, dir, `${name}.html`)
   }
 
+  // TODO: Use file-paths.ts/ext
   private getRelativeOutPath(src: string) {
     const { dir, name } = parse(src)
     return join(dir, `${name}.html`)
@@ -121,6 +121,7 @@ export default class Generator {
     await write(file)
   }
 
+  // TODO: Create a copy method for single files.
   public copyAssets() {
     return this.copyFolder('public', this.config.outDir)
   }
