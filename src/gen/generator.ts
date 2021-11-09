@@ -15,7 +15,8 @@ import { ReadTimeResults } from 'reading-time'
 
 import LayoutsCache from '@/gen/layouts-cache.js'
 import globFiles from '@/gen/glob-files.js'
-import HiroConfig from '@/config/hiro-config'
+import HiroConfig from '@/config/hiro-config.js'
+import { ext, superdir } from '@/utils/file-paths.js'
 
 export default class Generator {
   private readonly config: HiroConfig
@@ -42,7 +43,7 @@ export default class Generator {
   }
 
   public generateContent(src: string) {
-    const out = this.getOutPath(src)
+    const out = superdir(this.config.outDir, ext(src, '.html'))
     return this.generateMarkdown(src, out)
   }
 
@@ -70,7 +71,7 @@ export default class Generator {
     console.error(reporter(output))
 
     const context: MarkdownContext = {
-      path: this.getRelativeOutPath(src),
+      path: ext(src, '.html'),
       matter: output.data.matter as MarkdownFrontmatter,
       readTime: readTime,
       content: String(output),
@@ -97,18 +98,6 @@ export default class Generator {
   }
 
   // TODO: Implement groupby handlebars helper to group by category/tag when implemented.
-
-  // TODO: Use file-paths.ts/prepend and ext
-  private getOutPath(src: string) {
-    const { dir, name } = parse(src)
-    return join(this.config.outDir, dir, `${name}.html`)
-  }
-
-  // TODO: Use file-paths.ts/ext
-  private getRelativeOutPath(src: string) {
-    const { dir, name } = parse(src)
-    return join(dir, `${name}.html`)
-  }
 
   public async generateHandlebars(
     layout: string,
