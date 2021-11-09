@@ -1,11 +1,6 @@
-# hiro
+# Hiro
 
-Hiro Static Site Generator
-
-Class Pathy(path: string) with methods
-read(): string
-write(content: string)
-path manipulation methods
+A simple static site generator.
 
 https://unifiedjs.com/explore/package/remark-hint/
 
