@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
-import { join, parse } from 'path'
+import { join } from 'path'
+import { VFile } from 'vfile'
 import { toVFile, write, read } from 'to-vfile'
-import { matter } from 'vfile-matter'
 import { mkdirp } from 'vfile-mkdirp'
 import { reporter } from 'vfile-reporter'
 import { unified } from 'unified'
@@ -10,23 +10,24 @@ import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
-import readingTime from 'reading-time'
-import { ReadTimeResults } from 'reading-time'
 
-import LayoutsCache from '@/gen/layouts-cache.js'
-import globFiles from '@/gen/glob-files.js'
 import HiroConfig from '@/config/hiro-config.js'
+import LayoutsCache from '@/gen/layouts-cache.js'
+import PageContexts from './page-contexts.js'
+import globFiles from '@/gen/glob-files.js'
+import frontMatter from '@/gen/plugins/front-matter.js'
+import readingTime from './plugins/reading-time.js'
 import { ext, superdir } from '@/utils/file-paths.js'
 
 export default class Generator {
   private readonly config: HiroConfig
   private readonly layouts: LayoutsCache
-  private readonly pages: MarkdownContext[]
+  private readonly pages: PageContexts
 
   constructor(config: HiroConfig) {
     this.config = config
     this.layouts = new LayoutsCache('layouts')
-    this.pages = []
+    this.pages = new PageContexts()
   }
 
   public async generateAll() {
@@ -36,6 +37,7 @@ export default class Generator {
   }
 
   public async generateAllContent() {
+    // Clear the layouts cache. Some layouts may not be up-to-date anymore.
     this.layouts.clear()
     for (const src of await globFiles('content/**/*.md')) {
       await this.generateContent(src)
@@ -43,62 +45,55 @@ export default class Generator {
   }
 
   public generateContent(src: string) {
+    // Place the generated contents nto the output directory but preserve the
+    // subdirectories. The output file is an HTML file.
     const out = superdir(this.config.outDir, ext(src, '.html'))
     return this.generateMarkdown(src, out)
   }
 
-  // https://github.com/vfile/vfile-reporter-pretty
+  // TODO: Katex support.
+  // TODO: Comments plugin.
+  // TODO: Hints, Warnings plugin.
   private async generateMarkdown(src: string, out: string) {
     const input = await read(src)
+    const output = await this.processMarkdown(input)
+    const context = this.pages.set(src, output)
+    console.error(reporter(output))
+    this.generateHandlebars(context.matter.layout, context, out)
+  }
 
-    // TODO: Use as unified plugin or create one.
-    matter(input, { strip: true })
-
-    // TODO: Create plugin.
-    const readTime = readingTime(String(input))
-
-    // TODO: Katex support.
-    // TODO: Comments plugin.
-    // TODO: Hints, Warnings plugin.
-    const output = await unified()
+  private processMarkdown(input: VFile) {
+    return unified()
+      .use(frontMatter)
+      .use(readingTime)
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeHighlight)
       .use(rehypeStringify, { allowDangerousHtml: true })
       .process(input)
-
-    console.error(reporter(output))
-
-    const context: MarkdownContext = {
-      path: ext(src, '.html'),
-      matter: output.data.matter as MarkdownFrontmatter,
-      readTime: readTime,
-      content: String(output),
-    }
-
-    this.addOrUpdatePageContext(context)
-
-    this.generateHandlebars(context.matter.layout, context, out)
-  }
-
-  private addOrUpdatePageContext(context: MarkdownContext) {
-    const existing = this.pages.find((c) => c.path === context.path)
-    if (existing) {
-      Object.assign(existing, context)
-    } else {
-      this.pages.push(context)
-    }
   }
 
   public async generateIndex() {
-    const context = { pages: this.pages }
+    // The context for the index templates contains all meta-data for all
+    // generated content pages. These contain the relative path to the content
+    // page, the front matter, reading time and the rendered contents.
+    const context = { pages: this.pages.get() }
     const out = join(this.config.outDir, 'index.html')
     this.generateHandlebars('index', context, out)
   }
 
   // TODO: Implement groupby handlebars helper to group by category/tag when implemented.
 
+  /**
+   * Locates the layout, compiles it with the provided context and stores the
+   * rendered contents to the out file. Non-existing directories will be
+   * created automatically beforehand.
+   *
+   * @param layout The layout identifer.
+   * @param context The render context.
+   * @param out The path to the output file.
+   */
   public async generateHandlebars(
     layout: string,
     context: object,
@@ -122,18 +117,4 @@ export default class Generator {
       errorOnExist: false,
     })
   }
-}
-
-interface MarkdownContext {
-  path: string
-  matter: MarkdownFrontmatter
-  readTime: ReadTimeResults
-  content: string
-}
-
-interface MarkdownFrontmatter {
-  layout: string
-  title: string
-  synopsis: string
-  date: Date
 }

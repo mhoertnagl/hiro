@@ -12,17 +12,13 @@ https://unifiedjs.com/explore/package/rehype-autolink-headings/
 https://unifiedjs.com/explore/package/rehype-minify-whitespace/
 https://unifiedjs.com/explore/package/remark-directive/
 
-https://github.com/paulmillr/chokidar
 https://github.com/wooorm/fault
 
 https://github.com/isaacs/rimraf
 
 https://github.com/eldargab/easy-table
-https://github.com/isaacs/node-touch
 
 https://caolan.github.io/async/v3/
-
-https://lodash.com/
 
 https://github.com/SBoudrias/Inquirer.js or
 https://github.com/terkelg/prompts
