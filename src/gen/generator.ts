@@ -13,10 +13,11 @@ import rehypeStringify from 'rehype-stringify'
 
 import HiroConfig from '@/config/hiro-config.js'
 import LayoutsCache from '@/gen/layouts-cache.js'
-import PageContexts from './page-contexts.js'
+import PageContexts from '@/gen/page-contexts.js'
 import globFiles from '@/gen/glob-files.js'
-import frontMatter from '@/gen/plugins/front-matter.js'
-import readingTime from './plugins/reading-time.js'
+// import frontMatter from '@/gen/plugins/front-matter.js'
+import { matter } from 'vfile-matter'
+import readingTime from '@/gen/plugins/reading-time.js'
 import { ext, superdir } from '@/utils/file-paths.js'
 
 export default class Generator {
@@ -47,7 +48,8 @@ export default class Generator {
   public generateContent(src: string) {
     // Place the generated contents nto the output directory but preserve the
     // subdirectories. The output file is an HTML file.
-    const out = superdir(this.config.outDir, ext(src, '.html'))
+    const out = superdir(ext(src, '.html'), this.config.outDir)
+    console.log(src + ' -> ' + out)
     return this.generateMarkdown(src, out)
   }
 
@@ -63,15 +65,18 @@ export default class Generator {
   }
 
   private processMarkdown(input: VFile) {
-    return unified()
-      .use(frontMatter)
-      .use(readingTime)
-      .use(remarkParse)
-      .use(remarkGfm)
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeHighlight)
-      .use(rehypeStringify, { allowDangerousHtml: true })
-      .process(input)
+    return (
+      unified()
+        // .use(frontMatter)
+        .use(readingTime)
+        .use(remarkParse)
+        .use(remarkGfm)
+        .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeHighlight)
+        .use(rehypeStringify, { allowDangerousHtml: true })
+        // .process(input)
+        .process(matter(input, { strip: true }))
+    )
   }
 
   public async generateIndex() {
