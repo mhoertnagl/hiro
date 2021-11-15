@@ -4,8 +4,6 @@ A simple static site generator.
 
 https://unifiedjs.com/explore/package/remark-hint/
 
-https://unifiedjs.com/explore/package/rehype-katex/
-
 https://unifiedjs.com/explore/package/rehype-slug/
 https://unifiedjs.com/explore/package/rehype-autolink-headings/
 
@@ -30,12 +28,6 @@ https://github.com/scramjetorg/scramjet
 https://github.com/josdejong/workerpool
 
 https://github.com/micromatch/micromatch
-
-### Make my own plugins
-
-https://github.com/mottox2/remark-code-titles/blob/master/index.js
-
-https://github.com/temando/remark-graphviz/blob/master/src/index.js
 
 ### Designs
 

@@ -7,7 +7,9 @@ import { reporter } from 'vfile-reporter'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 import remarkRehype from 'remark-rehype'
+import rehypeKatex from 'rehype-katex'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 
@@ -15,7 +17,6 @@ import HiroConfig from '@/config/hiro-config.js'
 import LayoutsCache from '@/gen/layouts-cache.js'
 import PageContexts from '@/gen/page-contexts.js'
 import globFiles from '@/gen/glob-files.js'
-// import frontMatter from '@/gen/plugins/front-matter.js'
 import { matter } from 'vfile-matter'
 import readingTime from '@/gen/plugins/reading-time.js'
 import { ext, superdir } from '@/utils/file-paths.js'
@@ -49,11 +50,10 @@ export default class Generator {
     // Place the generated contents nto the output directory but preserve the
     // subdirectories. The output file is an HTML file.
     const out = superdir(ext(src, '.html'), this.config.outDir)
-    console.log(src + ' -> ' + out)
+    // console.log(src + ' -> ' + out)
     return this.generateMarkdown(src, out)
   }
 
-  // TODO: Katex support.
   // TODO: Comments plugin.
   // TODO: Hints, Warnings plugin.
   private async generateMarkdown(src: string, out: string) {
@@ -64,21 +64,28 @@ export default class Generator {
     this.generateHandlebars(context.matter.layout, context, out)
   }
 
+  /**
+   * Applies the remark and rehype pipeline to the loaded input vfile.
+   *
+   * @param input The input vfile with content loaded.
+   * @returns The processed markdown contents as a vfile.
+   */
   private processMarkdown(input: VFile) {
-    return (
-      unified()
-        // .use(frontMatter)
-        .use(readingTime)
-        .use(remarkParse)
-        .use(remarkGfm)
-        .use(remarkRehype, { allowDangerousHtml: true })
-        .use(rehypeHighlight)
-        .use(rehypeStringify, { allowDangerousHtml: true })
-        // .process(input)
-        .process(matter(input, { strip: true }))
-    )
+    return unified()
+      .use(readingTime)
+      .use(remarkParse)
+      .use(remarkMath)
+      .use(remarkGfm)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeKatex)
+      .use(rehypeHighlight)
+      .use(rehypeStringify, { allowDangerousHtml: true })
+      .process(matter(input, { strip: true }))
   }
 
+  /**
+   * Generates the index html file.
+   */
   public async generateIndex() {
     // The context for the index templates contains all meta-data for all
     // generated content pages. These contain the relative path to the content
@@ -111,11 +118,21 @@ export default class Generator {
   }
 
   // TODO: Create a copy method for single files.
+  /**
+   * Copies all static assets from the public directory to the output root
+   * directory.
+   */
   public copyAssets() {
-    return this.copyFolder('public', this.config.outDir)
+    return this.copyDirectory('public', this.config.outDir)
   }
 
-  private async copyFolder(src: string, out: string) {
+  /**
+   * Copies the contents of the source directory to the destination directory.
+   *
+   * @param src The source directory.
+   * @param out The destination directory.
+   */
+  private async copyDirectory(src: string, out: string) {
     await fs.copy(src, out, {
       recursive: true,
       overwrite: true,
