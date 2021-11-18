@@ -24,7 +24,7 @@ export default class PageContexts {
    * @returns The list of page contexts.
    */
   public get() {
-    return this.pages.filter((p) => p.matter.draft === false)
+    return this.pages.filter((p) => p.matter.draft !== true)
   }
 
   /**
@@ -78,5 +78,5 @@ interface Frontmatter {
   title: string
   synopsis: string
   date: Date
-  draft: boolean
+  draft?: boolean
 }
