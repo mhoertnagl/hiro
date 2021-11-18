@@ -50,7 +50,6 @@ export default class Generator {
     // Place the generated contents nto the output directory but preserve the
     // subdirectories. The output file is an HTML file.
     const out = superdir(ext(src, '.html'), this.config.outDir)
-    // console.log(src + ' -> ' + out)
     return this.generateMarkdown(src, out)
   }
 

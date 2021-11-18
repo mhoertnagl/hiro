@@ -1,10 +1,14 @@
 import fs from 'fs-extra'
 import { join } from 'path'
 import handlebars from 'handlebars'
+
 import registerArray from '@/gen/helpers/array.js'
 import registerFormatDate from '@/gen/helpers/format-date.js'
 import registerOrderBy from '@/gen/helpers/order-by.js'
 
+/**
+ * Loads and caches Handlebars layouts.
+ */
 export default class LayoutsCache {
   private readonly root: string
   private readonly layouts: LayoutsMap
