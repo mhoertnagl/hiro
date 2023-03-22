@@ -7,6 +7,8 @@ export default function run(args: string[]) {
   const program = new Command()
 
   program
+    .name('hiro')
+    .description('A simple static site generator.')
     .version('1.0.0')
     .command('build')
     .option('-w, --watch', 'Watch for file changes', false)

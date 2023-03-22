@@ -2,32 +2,15 @@
 
 A simple static site generator.
 
-https://unifiedjs.com/explore/package/remark-hint/
+## Setup
 
-https://unifiedjs.com/explore/package/rehype-slug/
-https://unifiedjs.com/explore/package/rehype-autolink-headings/
+Navigate the root directory and invoke
 
-https://unifiedjs.com/explore/package/rehype-minify-whitespace/
-https://unifiedjs.com/explore/package/remark-directive/
+```sh
+pnpm link --global
+```
 
-https://github.com/wooorm/fault
-
-https://github.com/isaacs/rimraf
-
-https://github.com/eldargab/easy-table
-
-https://caolan.github.io/async/v3/
-
-https://github.com/SBoudrias/Inquirer.js or
-https://github.com/terkelg/prompts
-
-https://github.com/visionmedia/node-progress
-https://github.com/klaussinani/signale
-
-https://github.com/scramjetorg/scramjet
-https://github.com/josdejong/workerpool
-
-https://github.com/micromatch/micromatch
+This will make hiro available globally.
 
 ### Designs
 
