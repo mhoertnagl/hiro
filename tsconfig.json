@@ -11,15 +11,30 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "module": "ES2020",
     "target": "ES2020",
     "outDir": "lib",
     "baseUrl": "./",
-    "lib": ["es2020"],
-    "typeRoots": ["src/types", "node_modules/@types"],
-    "paths": { "@/*": ["./src/*"] }
+    "lib": [
+      "es2020"
+    ],
+    "typeRoots": [
+      "src/types",
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": ["node_modules/", "test/"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules/",
+    "test/"
+  ]
 }
